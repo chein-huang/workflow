@@ -1,42 +1,19 @@
-# workflow
+package workflow_test
 
-## Quick start
-
-### Import
-```` golang
 import (
-    "github.com/chein-huang/workflow"
-)
-````
+	"context"
+	"testing"
 
-### Define work function
-```` golang
-func work(ctx context.Context, data *workflow.WorkData) error {
-    // do something
+	"github.com/chein-huang/workflow"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
+)
+
+func TestWorkFlow(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "WorkFlow Suite")
 }
-````
 
-### Only work
-```` golang
-data, err := workflow.StartWorkFlow(
-    work,
-)
-````
-
-### With function
-```` golang
-data, err := workflow.StartWorkFlow(
-    work, 
-    workflow.WithFinish(
-        func(ctx context.Context, data *workflow.WorkData) error {
-            // do something
-        },
-    ),
-)
-````
-
-### Define struct and interface method
-```` golang
 type TestStruct struct {
 	workBegin        workflow.Event
 	workBeforeCommit workflow.Event
@@ -79,13 +56,3 @@ func (s *TestStruct) WorkFinish(ctx context.Context, data *workflow.WorkData) er
 	}
 	return nil
 }
-````
-
-### With interface
-```` golang
-s := TestStruct{}
-data, err := workflow.StartWorkFlow(
-    work, 
-    workflow.WithInterface(&s),
-)
-````
