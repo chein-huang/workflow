@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"sync"
+
+	"github.com/sirupsen/logrus"
 )
 
 type WorkData struct {
@@ -16,6 +18,7 @@ type WorkData struct {
 	ctx              map[string]interface{}
 	ctxLocker        sync.RWMutex
 	isAborted        bool
+	Logger           *logrus.Entry
 }
 
 func NewWorkData() *WorkData {
@@ -26,6 +29,7 @@ func NewWorkData() *WorkData {
 		workFinish:       NewFuncs(),
 		workRollback:     NewFuncs(),
 		ctx:              make(map[string]interface{}),
+		Logger:           logrus.StandardLogger().WithField("from", "workflow"),
 	}
 	d.ResetProgress()
 	return d

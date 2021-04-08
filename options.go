@@ -3,6 +3,7 @@ package workflow
 import (
 	"context"
 
+	"github.com/sirupsen/logrus"
 	gormV2 "gorm.io/gorm"
 )
 
@@ -104,5 +105,11 @@ func WithInterface(param interface{}) Options {
 		}); ok {
 			WithFinish(f.WorkFinish).Apply(data)
 		}
+	})
+}
+
+func WithLogger(logger *logrus.Entry) Options {
+	return applyFunc(func(data *WorkData) {
+		data.Logger = logger.WithField("from", "workflow")
 	})
 }
